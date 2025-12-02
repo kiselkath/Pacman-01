@@ -231,16 +231,16 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
             g.drawString('x' + String.valueOf(lives) + " Score " + String.valueOf(score), tileSize/2, tileSize/2);
         }
 
-        // Временные переменные для компиляции
-        boolean gameOver = false;
-        int score = 0;
-        int lives = 3;
-        if (gameOver) {
-            g.drawString("Game Over: " + String.valueOf(score), tileSize/2, tileSize/2);
-        }
-        else {
-            g.drawString("x" + String.valueOf(lives) + " Score: " + String.valueOf(score), tileSize/2, tileSize/2);
-        }
+//        // Временные переменные для компиляции
+//        boolean gameOver = false;
+//        int score = 0;
+//        int lives = 3;
+//        if (gameOver) {
+//            g.drawString("Game Over: " + String.valueOf(score), tileSize/2, tileSize/2);
+//        }
+//        else {
+//            g.drawString("x" + String.valueOf(lives) + " Score: " + String.valueOf(score), tileSize/2, tileSize/2);
+//        }
     }
 
     public void move(){
@@ -261,6 +261,10 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
         for (Block ghost : ghosts){
             if (collision(ghost, pacman)){
                 lives -= 1;
+                if (lives == 0) {
+                    gameOver = true;
+                    return;
+                }
                 resetPositions();
             }
             if (ghost.y == tileSize*9 && ghost.direction != 'U' && ghost.direction != 'D'){
@@ -325,6 +329,9 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
     public void actionPerformed(ActionEvent e) {
         move();
         repaint();
+        if (gameOver){
+            gameLoop.stop();
+        }
     }
 
     //KeyListener
