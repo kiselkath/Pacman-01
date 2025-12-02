@@ -2,11 +2,13 @@ package org.example;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.HashSet;
 import javax.swing.*;
 
 
-public class PacMan extends JPanel implements ActionListener {
+public class PacMan extends JPanel implements ActionListener, KeyListener {
 
     class Block {
         int x;
@@ -84,6 +86,8 @@ public class PacMan extends JPanel implements ActionListener {
     PacMan() {
         setPreferredSize(new Dimension(boardWidth, boardHeight));
         setBackground(Color.BLACK);
+        addKeyListener(this);
+        setFocusable(true);
 
         //loadImages
         wallImage = new ImageIcon(getClass().getResource("/wall.png")).getImage();
@@ -178,9 +182,25 @@ public class PacMan extends JPanel implements ActionListener {
             g.drawString("x" + String.valueOf(lives) + " Score: " + String.valueOf(score), tileSize/2, tileSize/2);
         }
     }
-
+    //ActionListener
     @Override
     public void actionPerformed(ActionEvent e) {
         repaint();
+    }
+
+    //KeyListener
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        System.out.println("Key event:" + e.getKeyCode());
     }
 }
