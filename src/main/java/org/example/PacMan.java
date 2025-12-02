@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashSet;
+import java.util.Random;
 import javax.swing.*;
 
 
@@ -120,6 +121,8 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
     Block pacman;
 
     Timer gameLoop;
+    char[] directions = {'U', 'D', 'L', 'R'};
+    Random random =new Random();
 
     //Constructor
     PacMan() {
@@ -141,6 +144,10 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
         pacmanRightImage = new ImageIcon(getClass().getResource("/pacmanRight.png")).getImage();
 
         loadMap();
+        for (Block ghost : ghosts){
+            char newDirection = directions[random.nextInt(4)];
+            ghost.updateDirection(newDirection);
+        }
         gameLoop = new Timer(50, this); //20fps (1000/50) 50ms
         gameLoop.start();
 
@@ -235,6 +242,22 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
                 break;
             }
         }
+
+        //check ghost collisions
+        for (Block ghost : ghosts){
+            ghost.x += ghost.velocityX;
+            ghost.y += ghost.velocityY;
+            for (Block wall : walls){
+                if (collision(ghost, wall)){
+                    ghost.x -= ghost.velocityX;
+                    ghost.y -= ghost.velocityY;
+                    char newDirection = directions[random.nextInt(4)];
+                    ghost.updateDirection(newDirection);
+                }
+            }
+        }
+
+
     }
 
     /**
@@ -284,6 +307,21 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
         }
         if (e.getKeyCode() == KeyEvent.VK_RIGHT){
             pacman.updateDirection('R');
+        }
+
+        //change pacman-image with direction
+
+        if (pacman.direction == 'U'){
+            pacman.image = pacmanUpImage;
+        }
+        else if (pacman.direction == 'D'){
+            pacman.image = pacmanDownImage;
+        }
+        else if (pacman.direction == 'L'){
+            pacman.image = pacmanLeftImage;
+        }
+        else if (pacman.direction == 'R'){
+            pacman.image = pacmanRightImage;
         }
     }
 }

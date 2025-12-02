@@ -27,6 +27,5 @@ public class App
         frame.pack();
         pacmanGame.requestFocus();
 
-
     }
 }
