@@ -16,4 +16,3 @@
    Unlike the shooter-style games dominating arcades in the late ’70s, Pac-Man was intentionally nonviolent, colorful, and easy to understand — helping it attract a much more diverse group of players.
 
 ---
-git

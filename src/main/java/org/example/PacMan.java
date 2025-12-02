@@ -78,6 +78,8 @@ public class PacMan extends JPanel implements ActionListener {
     HashSet<Block> ghosts;
     Block pacman;
 
+    Timer gameLoop;
+
     //Constructor
     PacMan() {
         setPreferredSize(new Dimension(boardWidth, boardHeight));
@@ -96,10 +98,8 @@ public class PacMan extends JPanel implements ActionListener {
         pacmanRightImage = new ImageIcon(getClass().getResource("/pacmanRight.png")).getImage();
 
         loadMap();
-//            System.out.println(walls.size());
-//            System.out.println(foods.size());
-//            System.out.println(ghosts.size());
-
+        gameLoop = new Timer(50, this); //20fps (1000/50) 50ms
+        gameLoop.start();
 
     }
 
@@ -181,6 +181,6 @@ public class PacMan extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        repaint();
     }
 }
