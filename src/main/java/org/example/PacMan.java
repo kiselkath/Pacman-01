@@ -69,6 +69,11 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
                 this.velocityY = 0;
             }
         }
+
+        void reset() {
+            this.x = this.startX;
+            this.y = this.startY;
+        }
     }
 
     private int rowCount = 21;
@@ -123,6 +128,9 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
     Timer gameLoop;
     char[] directions = {'U', 'D', 'L', 'R'};
     Random random =new Random();
+    int score = 0;
+    int lives = 3;
+    boolean gameOver = false;
 
     //Constructor
     PacMan() {
@@ -217,6 +225,12 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
         }
         //score
         g.setFont(new Font("Arial", Font.PLAIN, 18));
+        if (gameOver) {
+            g.drawString("Game Over: " + String.valueOf(score), tileSize/2, tileSize/2);
+        } else {
+            g.drawString('x' + String.valueOf(lives) + " Score " + String.valueOf(score), tileSize/2, tileSize/2);
+        }
+
         // Временные переменные для компиляции
         boolean gameOver = false;
         int score = 0;
@@ -245,6 +259,10 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
 
         //check ghost collisions
         for (Block ghost : ghosts){
+            if (collision(ghost, pacman)){
+                lives -= 1;
+                resetPositions();
+            }
             if (ghost.y == tileSize*9 && ghost.direction != 'U' && ghost.direction != 'D'){
                 ghost.updateDirection('U');
             }
@@ -259,6 +277,16 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
                 }
             }
         }
+
+        //check food collision
+        Block foodEaten = null;
+        for (Block food : foods) {
+            if (collision(pacman, food)){
+                foodEaten = food;
+                score += 10;
+            }
+        }
+        foods.remove(foodEaten);
 
 
     }
@@ -275,6 +303,21 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
                 a.y < b.y + b.height &&
                 a.y + a.height > b.y;
 
+    }
+
+    /**
+     *
+     */
+    public void resetPositions(){
+        pacman.reset();
+        pacman.velocityX = 0;
+        pacman.velocityY = 0;
+
+        for (Block ghost : ghosts){
+            ghost.reset();
+            char newDirection = directions[random.nextInt(4)];
+            ghost.updateDirection(newDirection);
+        }
     }
 
     //ActionListener
@@ -297,7 +340,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        System.out.println("Key event:" + e.getKeyCode());
+        System.out.println("Key event: " + e.getKeyCode());
 
         if (e.getKeyCode() == KeyEvent.VK_UP){
             pacman.updateDirection('U');
