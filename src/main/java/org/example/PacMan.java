@@ -131,6 +131,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
     int score = 0;
     int lives = 3;
     boolean gameOver = false;
+    boolean paused = false;
 
     //Constructor
     PacMan() {
@@ -329,6 +330,19 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
         }
     }
 
+    //Пауза по пробелу: останавливаем/запускаем игровой цикл
+    void togglePause(){
+        if (gameOver) {
+            return;
+        }
+        paused = !paused;
+        if (paused){
+            gameLoop.stop();
+        } else {
+            gameLoop.start();
+        }
+    }
+
     //ActionListener
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -361,6 +375,11 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
             gameLoop.start();
         }
         System.out.println("Key event: " + e.getKeyCode());
+
+        if (e.getKeyCode() == KeyEvent.VK_SPACE){
+            togglePause();
+            return;
+        }
 
         if (e.getKeyCode() == KeyEvent.VK_UP){
             pacman.updateDirection('U');
