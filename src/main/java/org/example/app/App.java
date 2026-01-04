@@ -1,4 +1,6 @@
-package org.example;
+package org.example.app;
+
+import org.example.ui.PacMan;
 
 import javax.swing.JFrame;
 
